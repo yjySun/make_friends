@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yjy.mapper.TrendsMapper">
+
+    <select id="getUserTrends" resultType="com.yjy.pojo.TrendsGather">
+        SELECT t.userId userId, t.id trendsId, t.content content, t.praiseCount praiseCount, t.pushTime pushTime FROM `user` u JOIN trends t ON u.id = t.userId  AND u.id = #{id} ORDER BY pushTime DESC
+    </select>
+
+    <select id="getAllTrends" resultType="com.yjy.pojo.TrendsGather">
+        SELECT t.userId userId, t.id trendsId, t.content content, t.praiseCount praiseCount, t.pushTime pushTime, t.commentCount, u.username, u.titleImages, u.sex FROM `user` u JOIN trends t ON u.id = t.userId ORDER BY pushTime DESC
+    </select>
+
+    <update id="editTrends">
+        UPDATE trends SET content = #{content} WHERE id = #{trendsId};
+    </update>
+
+    <update id="editPraiseCount">
+        UPDATE trends SET praiseCount = praiseCount+1 WHERE id = #{trendsId};
+    </update>
+
+    <update id="editCommentCount">
+        UPDATE trends SET commentCount = commentCount+1 WHERE id = #{trendsId};
+    </update>
+
+    <delete id="deleteTrends">
+        DELETE FROM trends WHERE id = #{trendsId};
+    </delete>
+
+</mapper>

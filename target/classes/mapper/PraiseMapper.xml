@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yjy.mapper.PraiseMapper">
+
+    <select id="getPraiseImages" resultType="java.lang.String">
+        SELECT u.titleImages FROM praise p JOIN user u ON p.praiseTrends = #{trendsId} AND u.id = p.praiseUser LIMIT 0,3;
+    </select>
+
+    <select id="getPraise" resultType="com.yjy.pojo.Praise">
+        SELECT * FROM praise WHERE praiseUser = #{praise.praiseUser} AND praiseTrends = #{praise.praiseTrends};
+    </select>
+
+    <delete id="deletePraise">
+        DELETE FROM praise WHERE praiseTrends = #{trendsId};
+    </delete>
+
+</mapper>

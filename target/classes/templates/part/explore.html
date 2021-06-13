@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Favicon -->
+    <link href="/images/favicon.png" rel="icon" type="image/png">
+
+    <!-- Basic Page Needs
+        ================================================== -->
+    <title>Instello校园交友系统</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Instello - Sharing Photos platform HTML Template">
+
+    <!-- icons
+        ================================================== -->
+    <link rel="stylesheet" href="/css/icons.css">
+
+    <!-- CSS 
+        ================================================== -->
+    <link rel="stylesheet" href="/css/uikit.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tailwind.css">
+
+    <style>
+        @media (min-width: 1024px) {
+            .container {
+                max-width: 950px !important;
+                padding-top: 30px !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+
+<div id="wrapper">
+
+    <div th:replace="common/leftInfo::sidebar"></div>
+
+    <div class="main_content">
+
+        <div th:replace="common/header::headerBar"></div>
+
+        <div class="container m-auto">
+
+            <h1 class="lg:text-2xl text-lg font-extrabold leading-none text-gray-900 tracking-tight mb-2"> 探索 </h1>
+
+            <div class="lg:m-0 -mx-5 flex justify-between items-center py-2 relative space-x-3 dark-tabs"
+                 uk-sticky="cls-active: bg-gray-100 bg-opacity-95; media : @m ; media @m">
+                <div class="flex overflow-x-scroll lg:overflow-hidden lg:pl-0 pl-5 space-x-3 lg:py-2">
+                    <a href="javascript:void(0);" id="timeSort"
+                       class="bg-white py-2 px-4 rounded inline-block font-bold shadow" sequence="asc"> 时间排序</a>
+                    <a href="javascript:void(0);" id="praiseSort"
+                       class="bg-white py-2 px-4 rounded inline-block font-bold shadow" sequence="asc"> 点赞排序 </a>
+                    <a href="javascript:void(0);" id="commentSort"
+                       class="bg-white py-2 px-4 rounded inline-block font-bold shadow" sequence="asc"> 评论排序</a>
+                </div>
+            </div>
+
+            <div id="sortDiv" class="grid lg:grid-cols-4 grid-cols-2 gap-2 hover:text-yellow-700 uk-link-reset">
+
+                <div th:each="allTrends:${session.allTrends}" class="sortFrame"
+                     th:trendsTime="${#dates.format(allTrends.getPushTime(),'yyyyMMddHHmmss')}"
+                     th:praiseCount="${allTrends.getPraiseCount()}" th:commentCount="${allTrends.getCommentCount()}">
+                    <div class="bg-yellow-400 max-w-full lg:h-64 h-40 rounded-md relative overflow-hidden shadow-sm">
+                        <a th:href="'#'+${allTrends.getUuid()}" uk-toggle>
+                            <img th:if="${not #strings.isEmpty(allTrends.getTitleImages())}"
+                                 th:src="${allTrends.getTitleImages()}"
+                                 class="w-full h-full absolute object-cover inset-0 object-cover object-left">
+                            <img th:if="${#strings.isEmpty(allTrends.getTitleImages())}"
+                                 th:src="@{images/emptyImages.png}"
+                                 class="w-full h-full absolute object-cover inset-0 object-cover object-left">
+                        </a>
+                        <div class="absolut absolute bottom-0 flex items-center justify-between px-4 py-3 space-x-2 text-white w-full custom-overly1">
+                            <a href="javascript:void(0);" th:text="${allTrends.getUsername()}">Martin </a>
+                            <div class="flex space-x-3">
+                                <a href="javascript:void(0);" class="flex items-center"
+                                   th:if="${allTrends.getIsPraise() == 0}">
+                                    <ion-icon name="heart" class="mr-1 md hydrated" role="img" aria-label="heart"
+                                              th:id="${allTrends.getUuid()}"></ion-icon>
+                                    <span th:text="${allTrends.getPraiseCount()}" th:id="${allTrends.getUuid()}"></span>
+                                </a>
+                                <a href="javascript:void(0);" class="flex items-center"
+                                   th:if="${allTrends.getIsPraise() == 1}">
+                                    <ion-icon name="heart" class="mr-1 md hydrated text-pink-500" role="img"
+                                              aria-label="heart"></ion-icon>
+                                    <span th:text="${allTrends.getPraiseCount()}" class="text-pink-500"></span> </a>
+                                <a href="javascript:void(0);" class="flex items-center"
+                                   th:if="${allTrends.getIsComment() == 0}">
+                                    <ion-icon name="chatbubble-ellipses" class="mr-1 md hydrated" role="img"
+                                              aria-label="chatbubble ellipses"></ion-icon>
+                                    <span th:text="${allTrends.getCommentCount()}"></span> </a>
+                                <a href="javascript:void(0);" class="flex items-center"
+                                   th:if="${allTrends.getIsComment() == 1}">
+                                    <ion-icon name="chatbubble-ellipses" class="mr-1 md hydrated text-pink-500"
+                                              role="img" aria-label="chatbubble ellipses"></ion-icon>
+                                    <span th:text="${allTrends.getCommentCount()}" class="text-pink-500"></span> </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Story modal -->
+<div th:each="allTrends:${session.allTrends}" th:id="${allTrends.getUuid()}" class="uk-modal-container reloadDiv"
+     uk-modal>
+    <div class="uk-modal-dialog story-modal">
+        <button class="uk-modal-close-default lg:-mt-9 lg:-mr-9 -mt-5 -mr-5 shadow-lg bg-white rounded-full p-4 transition dark:bg-gray-600 dark:text-white"
+                type="button" uk-close></button>
+
+        <div class="story-modal-media">
+            <img th:if="${not #strings.isEmpty(allTrends.getTitleImages())}" th:src="${allTrends.getTitleImages()}"
+                 alt="" class="inset-0 h-full w-full object-cover">
+            <img th:if="${#strings.isEmpty(allTrends.getTitleImages())}" th:src="@{images/emptyImages.png}" alt=""
+                 class="inset-0 h-full w-full object-cover">
+        </div>
+        <div class="flex-1 bg-white dark:bg-gray-900 dark:text-gray-100">
+
+            <!-- post header-->
+            <div class="border-b flex items-center justify-between px-5 py-3 dark:border-gray-600">
+                <div class="flex flex-1 items-center space-x-4">
+                    <a href="javascript:void(0);">
+                        <div class="bg-gradient-to-tr from-yellow-600 to-pink-600 p-0.5 rounded-full">
+                            <img th:if="${not #strings.isEmpty(allTrends.getTitleImages())}"
+                                 th:src="${allTrends.getTitleImages()}"
+                                 class="bg-gray-200 border border-white rounded-full w-8 h-8">
+                            <img th:if="${#strings.isEmpty(allTrends.getTitleImages())}"
+                                 th:src="@{images/emptyImages.png}"
+                                 class="bg-gray-200 border border-white rounded-full w-8 h-8">
+                        </div>
+                    </a>
+                    <span class="block text-lg font-semibold"
+                          th:text="${allTrends.getUsername()}"> Johnson smith </span>
+                </div>
+                <a href="javascript:void(0);">
+                    <i class="icon-feather-more-horizontal text-2xl rounded-full p-2 transition -mr-1"></i>
+                </a>
+            </div>
+            <div class="story-content p-4" data-simplebar>
+
+                <p th:text="${allTrends.getContent()}"> 动态内容 </p>
+
+                <div class="py-4 ">
+                    <div class="flex justify-around">
+                        <a href="javascript:void(0);" id="praise" th:uuid="${allTrends.getUuid()}"
+                           th:praiseUser="${session.user.id}" th:praiseTrends="${allTrends.getTrendsId()}"
+                           class="flex items-center space-x-3">
+                            <div class="flex font-bold items-baseline editColor"
+                                 th:if="${allTrends.getIsPraise() == 0}"><i class="uil-heart mr-1 editColor"> </i>
+                                <ion-icon name="heart" class="mr-1 md hydrated text-pink-500 editColor" role="img"
+                                          aria-label="heart" style="display: none"></ion-icon>
+                                赞
+                            </div>
+                            <div class="flex font-bold items-baseline text-pink-500"
+                                 th:if="${allTrends.getIsPraise() == 1}">
+                                <ion-icon name="heart" class="mr-1 md hydrated text-pink-500" role="img"
+                                          aria-label="heart"></ion-icon>
+                                赞
+                            </div>
+                        </a>
+                        <a href="javascript:void(0);" class="flex items-center space-x-3">
+                            <div><i class="uil-clock mr-1"></i><span
+                                    th:text="${#dates.format(allTrends.getPushTime(), 'yyyy-MM-dd HH:mm')}">2021-04-15 17:50:43</span>
+                            </div>
+                        </a>
+                    </div>
+                    <hr class="-mx-4 my-3">
+                    <div class="flex items-center space-x-3">
+                        <div class="flex items-center">
+                            <img th:each="praiImages:${allTrends.getPraiseImages()}"
+                                 th:if="${not #strings.isEmpty(praiImages)}" th:src="${praiImages}" alt=""
+                                 class="w-6 h-6 rounded-full border-2 border-white">
+                            <img th:each="praiImages:${allTrends.getPraiseImages()}"
+                                 th:if="${#strings.isEmpty(praiImages)}" th:src="@{images/emptyImages.png}" alt=""
+                                 class="w-6 h-6 rounded-full border-2 border-white">
+                        </div>
+                        <div th:if="${allTrends.getPraiseCount() > 3}">
+                            <span>等共 <strong th:text="${allTrends.getPraiseCount()}"></strong> 人赞了<span
+                                    th:text="${allTrends.getSex() == 0}?'她':'他'"></span></span>
+                        </div>
+                        <div th:if="${allTrends.getPraiseCount() <= 3}">
+                            <span>共 <strong th:text="${allTrends.getPraiseCount()}"></strong> 人赞了<span
+                                    th:text="${allTrends.getSex() == 0}?'她':'他'"></span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="-mt-1 space-y-1">
+                    <div class="flex flex-1 items-center space-x-2" th:each="comment:${allTrends.getComments()}">
+                        <img th:if="${not #strings.isEmpty(comment.getUserImages())}"
+                             th:src="${comment.getUserImages()}" class="rounded-full w-8 h-8">
+                        <img th:if="${#strings.isEmpty(comment.getUserImages())}" th:src="@{images/emptyImages.png}"
+                             class="rounded-full w-8 h-8">
+                        <div class="flex-1 p-2 CommentContentDiv" th:text="${comment.getCommentContent()}"
+                             th:id="'a'+${comment.getId()}" th:commentTime="${#dates.format(comment.getCommentTime(), 'yyyy-MM-dd HH:mm')}">
+                            这是评论
+                        </div>
+                    </div>
+
+                </div>
+
+
+            </div>
+            <div class="p-3 border-t dark:border-gray-600">
+                <div class="bg-gray-200 dark:bg-gray-700 rounded-full rounded-md relative">
+                    <input type="text" th:trendsId="${allTrends.getTrendsId()}"
+                           th:userId="${session.user.getId()}" th:userImages="${session.user.getTitleImages()}"
+                           placeholder="写下你的评论..." class="bg-transparent max-h-8 shadow-none commentContent">
+                    <div class="absolute bottom-0 flex h-full items-center right-0 right-3 text-xl space-x-2">
+                        <a href="javascript:void(0);" id="addComment" th:trendsId="${allTrends.getTrendsId()}"
+                           th:userId="${session.user.getId()}" th:userImages="${session.user.getTitleImages()}"> <i
+                                class="uil-location-arrow"></i></a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<!--发布动态模态窗口-->
+<div id="offcanvas-create" uk-offcanvas="flip: true; overlay: true">
+    <div class="uk-offcanvas-bar lg:w-4/12 w-full dark:bg-gray-700 dark:text-gray-300 p-0">
+
+        <button class="uk-offcanvas-close" type="button" uk-close></button>
+
+        <!-- notivication header -->
+        <div class="-mb-1 border-b font-semibold px-5 py-5 text-lg">
+            <h4>动态发布 </h4>
+        </div>
+
+        <div class=" p-6 space-y-3">
+            <div>
+                <label class="mb-0"> 具体内容 </label>
+                <textarea th:userId="${session.user.getId()}" id="content" name="description" rows="3"
+                          class="bg-gray-100 shadow-none border mt-2 w-full px-3 py-2 rounded-md focus:border-blue-600 outline-none mt- id='description' "
+                          placeholder="写下你的想法..."></textarea>
+            </div>
+            <button id="addTrends" type="button"
+                    class="bg-pink-600 font-semibold p-2 mt-2 rounded-md text-center text-white w-full">
+                发布
+            </button>
+        </div>
+
+
+    </div>
+</div>
+<!-- Scripts
+    ================================================== -->
+<script src="/js/tippy.all.min.js"></script>
+<script src="/js/jquery-3.3.1.min.js"></script>
+<script src="/js/uikit.js"></script>
+<script src="/js/simplebar.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/js/layer/layer.js"></script>
+<script src="/myjs/leftInfo.js"></script>
+<script src="/myjs/explore.js"></script>
+
+
+<script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
+</body>
+
+</html>

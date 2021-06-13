@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yjy.mapper.LostMapper">
+
+    <update id="editLookCount">
+        UPDATE lost SET lookCount = lookCount+1 WHERE id = #{id}
+    </update>
+
+    <delete id="deleteLost">
+        DELETE FROM lost WHERE uuid = #{uuid};
+    </delete>
+
+    <select id="getAllLost" resultType="com.yjy.pojo.LostGather">
+        SELECT l.*, u.username FROM lost l JOIN user u ON l.userId = u.id ORDER BY l.pushtime DESC;
+    </select>
+
+    <select id="getUserLost" resultType="com.yjy.pojo.LostGather">
+        SELECT l.*, u.username FROM lost l JOIN user u ON l.userId = u.id AND l.userId = #{userId} ORDER BY l.pushtime DESC ;
+    </select>
+
+</mapper>

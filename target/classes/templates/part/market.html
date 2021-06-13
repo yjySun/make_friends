@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Favicon -->
+    <link href="/images/favicon.png" rel="icon" type="image/png">
+
+    <!-- Basic Page Needs
+        ================================================== -->
+    <title>Instello校园交友系统</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Instello - Sharing Photos platform HTML Template">
+
+    <!-- icons
+        ================================================== -->
+    <link rel="stylesheet" href="/css/icons.css">
+
+    <!-- CSS 
+        ================================================== -->
+    <link rel="stylesheet" href="/css/uikit.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tailwind.css">
+
+    <style>
+        @media (min-width: 1024px) {
+            .container {
+                max-width: 950px !important;
+                padding-top: 30px !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <div id="wrapper">
+
+        <div th:replace="common/leftInfo::sidebar"></div>
+
+        <div class="main_content">
+
+            <header>
+                <div class="header_inner">
+                    <div class="left-side">
+                        <!-- Logo -->
+                        <div id="logo" class=" uk-hidden@s">
+                            <a href="javascript:void(0);">
+                                <img src="/images/logo-mobile.png" alt="">
+                                <img src="/images/logo-mobile-light.png" class="logo_inverse">
+                            </a>
+                        </div>
+
+                        <div class="triger" uk-toggle="target: #wrapper ; cls: sidebar-active">
+                            <i class="uil-bars"></i>
+                        </div>
+
+                    </div>
+                    <div class="right-side lg:pr-4">
+                        <!-- upload -->
+                        <a href="javascript:void(0);" uk-toggle="target: #offcanvas-create" class="bg-pink-500 flex font-bold hover:bg-pink-600 hover:text-white inline-block items-center lg:block max-h-10 mr-4 px-4 py-2 rounded shado text-white" ><i class="-mb-1 mr-1 uil-plus"></i>发布失物</a>
+
+                    </div>
+                </div>
+            </header>
+
+            <div class="container m-auto">
+           
+                <h1 class="lg:text-2xl text-lg font-extrabold leading-none text-gray-900 tracking-tight mb-2"> 寻找失物 </h1>
+                <div class="lg:m-0 -mx-5 flex justify-between items-center py-2 relative space-x-3 dark-tabs" uk-sticky="cls-active: bg-gray-100 bg-opacity-95; media : @m ; media @m">
+                    <div class="flex overflow-x-scroll lg:overflow-hidden lg:pl-0 pl-5 space-x-3 lg:py-2">
+                        <a href="javascript:void(0);" id="lookSort" class="bg-white py-2 px-4 rounded inline-block font-bold shadow" sequence="asc"> 浏览排序</a>
+                        <a href="javascript:void(0);" id="timeSort" class="bg-white py-2 px-4 rounded inline-block font-bold shadow" sequence="asc"> 时间排序 </a>
+                    </div>
+                </div>
+
+                <div class="relative mt-4" >
+
+                    <div class=" pb-3">
+
+                        <ul id="sortUL" class="uk-child-width-1-5@m uk-child-width-1-3@s uk-child-width-1-2 uk-grid">
+                            <li class="sortFrame" th:each="allLost:${session.allLost}" th:lookCount="${allLost.getLookCount()}" th:pushTime="${#dates.format(allLost.getPushTime(),'yyyyMMddHHmmss')}">
+                                <a href="javascript:void(0);" id="clickLost" th:lostId="${allLost.getId()}" th:uk-toggle="'target: #a'+${allLost.getUuid()}">
+                                    <div class="market-list">
+                                        <div class="item-media">
+                                            <img th:if="${allLost.getLostImages().size() != 0}" th:src="${allLost.getLostImages().get(0)}" alt="">
+                                            <img th:if="${allLost.getLostImages().size() == 0}" th:src="@{images/pictureEmpty.png}" alt="">
+                                        </div>
+
+                                        <div class="item-inner">
+                                            <div class="item-price" th:text="${allLost.getLostName()}"> 无线耳机 </div>
+                                            <div class="item-title" th:text="${allLost.getUsername()}"> admin </div>
+                                            <div class="item-statistic">
+                                                <i class="uil-eye"></i><span th:text="${allLost.getLookCount()}" id="countDisplay"></span>
+                                                <span th:text="${#dates.format(allLost.getPushTime(),'yyyy-MM-dd HH:mm')}">2021-04-15 16:42</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+    <div id="offcanvas-create" uk-offcanvas="flip: true; overlay: true">
+        <div class="uk-offcanvas-bar lg:w-4/12 w-full dark:bg-gray-700 dark:text-gray-300 p-0">
+    
+            <button class="uk-offcanvas-close" type="button" uk-close></button>
+
+            <!-- notivication header -->
+            <div class="-mb-1 border-b font-semibold px-5 py-5 text-lg">
+                <h4>发布失物信息  </h4>
+            </div>
+
+            <div class=" p-6 space-y-3">
+                <div>
+                    <label class="mb-0"> 名字 </label>
+                    <input id="lostName" placeholder="失物名称" class="bg-gray-100 dark:bg-gray-600 shadow-none border focus:border-blue-600 mt-2 outline-none px-3 py-2 rounded-md w-full">
+                </div>
+                <div>
+                    <label class="mb-0"> 具体描述 </label>
+                    <textarea id="description" name="description" rows="3" class="bg-gray-100 shadow-none border mt-2 w-full px-3 py-2 rounded-md focus:border-blue-600 outline-none mt- id='description' " placeholder="请你描述物品外观、丢失地点、时间等详细信息..."></textarea>
+                </div>
+                
+                
+                <div class="grid grid-cols-6 gap-4">
+                    <div class="col-span-2">
+                        <label class="mb-0"> 联系人姓名 </label>
+                        <input id="contactName" placeholder="请输入你的姓名" class="bg-gray-100 dark:bg-gray-600 shadow-none border focus:border-blue-600 mt-2 outline-none px-3 py-2 rounded-md w-full">
+                    </div>
+                </div>
+                <div class="grid grid-cols-6 gap-4">
+                    <div>
+                        <div class="col-span-2">
+                            <label class="mb-0"> 联系方式 </label>
+                            <input id="contactPhone" placeholder="请输入你的手机号码" class="bg-gray-100 dark:bg-gray-600 shadow-none border focus:border-blue-600 mt-2 outline-none px-3 py-2 rounded-md w-full">
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="mb-0"> 失物照片 </label>
+                </div>
+
+                <div uk-form-custom>
+                    <div class="bg-gray-100 border-2 border-dashed flex flex-col h-10 items-center justify-center relative w-full rounded-lg dark:bg-gray-800 dark:border-gray-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-24">
+                            <path d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z" />
+                            <path d="M9 13h2v5a1 1 0 11-2 0v-5z" />
+                        </svg>
+                    </div>
+                    <input type="file" id="lostImages1">
+
+                </div>
+
+                <div uk-form-custom >
+                    <div class="bg-gray-100 border-2 border-dashed flex flex-col h-10 items-center justify-center relative w-full rounded-lg dark:bg-gray-800 dark:border-gray-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-24">
+                            <path d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z" />
+                            <path d="M9 13h2v5a1 1 0 11-2 0v-5z" />
+                        </svg>
+                    </div>
+                    <input type="file" id="lostImages2">
+
+                </div>
+
+                <div uk-form-custom>
+                    <div class="bg-gray-100 border-2 border-dashed flex flex-col h-10 items-center justify-center relative w-full rounded-lg dark:bg-gray-800 dark:border-gray-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-24">
+                            <path d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z" />
+                            <path d="M9 13h2v5a1 1 0 11-2 0v-5z" />
+                        </svg>
+                    </div>
+                    <input type="file" id="lostImages3">
+                </div>
+
+                <button th:userId="${session.user.id}" type="button" id="lostButton" class="bg-pink-600 font-semibold p-2 mt-2 rounded-md text-center text-white w-full">
+                    确认并发布 </button>
+            </div>
+
+            
+        </div>
+    </div>
+
+<!--modal-->
+<div th:id="'a'+${allLost.getUuid()}" uk-offcanvas="flip: true; overlay: true" th:each="allLost:${session.allLost}">
+    <div class="uk-offcanvas-bar lg:w-5/12 w-full dark:bg-gray-700 dark:text-gray-300 p-0">
+
+        <button class="uk-offcanvas-close bg-white rounded-full p-2" type="button" uk-close></button>
+
+        <div class="relative uk-visible-toggle uk-light w-full" tabindex="-1" uk-slideshow>
+
+            <ul class="uk-slideshow-items" uk-lightbox>
+                <li th:if="${allLost.getLostImages().size() == 0}">
+                    <a th:href="@{images/pictureEmpty.png}">
+                        <img th:src="@{images/pictureEmpty.png}" alt="" class="w-full">
+                    </a>
+                </li>
+                <li th:if="${allLost.getLostImages().size() != 0}" th:each="images:${allLost.getLostImages()}">
+                    <a th:href="${images}">
+                        <img th:src="${images}" alt="" class="w-full">
+                    </a>
+                </li>
+            </ul>
+        
+            <a class="uk-position-center-left uk-position-small uk-hidden-hover" href="javascript:void(0);" uk-slidenav-previous uk-slideshow-item="previous"></a>
+            <a class="uk-position-center-right uk-position-small uk-hidden-hover" href="javascript:void(0);" uk-slidenav-next uk-slideshow-item="next"></a>
+        
+        </div>
+
+
+        <div class="p-6">
+          
+            <div class="text-xl font-semibold mb-2" th:text="${allLost.getLostName()}"> 物品名称 </div>
+        
+
+           <div class="grid grid-cols-2 gap-3 divide-x">
+            
+            <div>
+                <h3 class="font-semibold text-gray-400"> 联系人 </h3>
+                <div class="flex items-center mt-1 space-x-2">
+                    <div class="text-2xl font-bold" th:text="${allLost.getContactName()}">姚纪远</div>
+                </div>
+            </div>
+
+            <div class="pl-5 -ml-3">
+                <h3 class="font-semibold text-gray-400"> 手机号码 </h3>
+                <div>
+                    <span class="text-2xl font-bold" th:text="${allLost.getContactPhone()}"> 15614413385 </span>
+                </div>
+            </div>
+           </div>
+
+            <div class="text-lg font-semibold mb-1 border-t pt-2 mt-3">  具体描述 </div>
+
+           <div>
+            <p class="leading-7" th:text="${allLost.getDescription()}"> 这里是丢失物品的具体描述 </p>
+          </div>
+            <button th:if="${session.user.id == allLost.getUserId()}" id="deleteLost" th:uuid="${allLost.getUuid()}" type="button" class="bg-pink-600 font-semibold p-2 mt-2 rounded-md text-center text-white w-full">
+                删除失物 </button >
+        </div>
+    </div>
+</div>
+    <!--modal end-->
+
+    <!-- Scripts
+    ================================================== -->
+    <script src="/js/tippy.all.min.js"></script>
+    <script src="/js/jquery-3.3.1.min.js"></script>
+    <script src="/js/layer/layer.js"></script>
+    <script src="/js/uikit.js"></script>
+    <script src="/js/simplebar.js"></script>
+    <script src="/js/custom.js"></script>
+    <script src="/myjs/leftInfo.js"></script>
+    <script src="/myjs/market.js"></script>
+
+    <script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
+</body>
+
+</html>

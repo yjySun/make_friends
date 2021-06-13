@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yjy.mapper.StatisticsMapper">
+
+
+    <update id="editAllUser">
+        UPDATE statistics SET allUser = (SELECT COUNT(*) FROM `user`)
+    </update>
+
+    <update id="editAllTrends">
+        UPDATE statistics SET allTrends = (SELECT COUNT(*) FROM trends)
+    </update>
+
+    <update id="editAllLost">
+        UPDATE statistics SET allLost = (SELECT COUNT(*) FROM lost)
+    </update>
+
+    <update id="editManCount">
+        UPDATE statistics SET manCount = (SELECT COUNT(*) FROM `user` WHERE sex = 1)
+    </update>
+
+    <update id="editManRatio">
+        UPDATE statistics SET manRatio = ROUND(mancount/(SELECT count(*) from `user`),2)
+    </update>
+
+    <select id="getStatistics" resultType="com.yjy.pojo.Statistics">
+        SELECT * FROM statistics;
+    </select>
+
+    <select id="getRegisterCount" resultType="java.lang.Integer">
+        SELECT COUNT(*) registerCount FROM `user` WHERE YEAR(registerTime) = YEAR(NOW());
+    </select>
+
+    <select id="getRegisterMonth" resultType="com.yjy.pojo.RegisterStatistics">
+--         SELECT
+--             SUM(CASE WHEN MONTH(registerTime) =1 THEN 1 ELSE 0 END) Jan,
+--             SUM(CASE WHEN MONTH(registerTime) =2 THEN 1 ELSE 0 END) Feb,
+--             SUM(CASE WHEN MONTH(registerTime) =3 THEN 1 ELSE 0 END) Mar,
+--             SUM(CASE WHEN MONTH(registerTime) =4 THEN 1 ELSE 0 END) Apr,
+--             SUM(CASE WHEN MONTH(registerTime) =5 THEN 1 ELSE 0 END) May,
+--             SUM(CASE WHEN MONTH(registerTime) =6 THEN 1 ELSE 0 END) Jun,
+--             SUM(CASE WHEN MONTH(registerTime) =7 THEN 1 ELSE 0 END) Jul,
+--             SUM(CASE WHEN MONTH(registerTime) =8 THEN 1 ELSE 0 END) Aug,
+--             SUM(CASE WHEN MONTH(registerTime) =9 THEN 1 ELSE 0 END) Sept,
+--             SUM(CASE WHEN MONTH(registerTime) =10 THEN 1 ELSE 0 END) Oct,
+--             SUM(CASE WHEN MONTH(registerTime) =11 THEN 1 ELSE 0 END) Nov,
+--             SUM(CASE WHEN MONTH(registerTime) =12 THEN 1 ELSE 0 END) 'Dec'
+--         FROM user
+--         WHERE YEAR(registerTime) = YEAR(NOW());
+SELECT
+    IF(SUM(CASE WHEN MONTH(registerTime) = 1 THEN 1 ELSE 0 END) IS NULL,0, SUM(CASE WHEN MONTH(registerTime) =1 THEN 1 ELSE 0 END))   Jan,
+    IF(SUM(CASE WHEN MONTH(registerTime) = 2 THEN 1 ELSE 0 END) IS NULL,0, SUM(CASE WHEN MONTH(registerTime) =2 THEN 1 ELSE 0 END)) Feb,
+    IF(SUM(CASE WHEN MONTH(registerTime) = 3 THEN 1 ELSE 0 END) IS NULL,0, SUM(CASE WHEN MONTH(registerTime) =3 THEN 1 ELSE 0 END)) Mar,
+    IF(SUM(CASE WHEN MONTH(registerTime) = 4 THEN 1 ELSE 0 END) IS NULL,0, SUM(CASE WHEN MONTH(registerTime) =4 THEN 1 ELSE 0 END)) Apr,
+    IF(SUM(CASE WHEN MONTH(registerTime) = 5 THEN 1 ELSE 0 END) IS NULL,0, SUM(CASE WHEN MONTH(registerTime) =5 THEN 1 ELSE 0 END)) May,
+    IF(SUM(CASE WHEN MONTH(registerTime) = 6 THEN 1 ELSE 0 END) IS NULL,0, SUM(CASE WHEN MONTH(registerTime) =6 THEN 1 ELSE 0 END)) Jun,
+    IF(SUM(CASE WHEN MONTH(registerTime) = 7 THEN 1 ELSE 0 END) IS NULL,0, SUM(CASE WHEN MONTH(registerTime) =7 THEN 1 ELSE 0 END)) Jul,
+    IF(SUM(CASE WHEN MONTH(registerTime) = 8 THEN 1 ELSE 0 END) IS NULL,0, SUM(CASE WHEN MONTH(registerTime) =8 THEN 1 ELSE 0 END)) Aug,
+    IF(SUM(CASE WHEN MONTH(registerTime) = 9 THEN 1 ELSE 0 END) IS NULL,0, SUM(CASE WHEN MONTH(registerTime) =9 THEN 1 ELSE 0 END)) Sept,
+    IF(SUM(CASE WHEN MONTH(registerTime) = 10 THEN 1 ELSE 0 END) IS NULL,0, SUM(CASE WHEN MONTH(registerTime) =10 THEN 1 ELSE 0 END)) Oct,
+    IF(SUM(CASE WHEN MONTH(registerTime) = 11 THEN 1 ELSE 0 END) IS NULL,0, SUM(CASE WHEN MONTH(registerTime) =11 THEN 1 ELSE 0 END)) Nov,
+    IF(SUM(CASE WHEN MONTH(registerTime) = 12 THEN 1 ELSE 0 END) IS NULL,0, SUM(CASE WHEN MONTH(registerTime) =12 THEN 1 ELSE 0 END)) 'Dec'
+FROM user
+WHERE YEAR(registerTime) = YEAR(NOW());
+    </select>
+
+    <select id="getGrowthRatio" resultType="java.lang.Double">
+--         SELECT ROUND(((SELECT COUNT(*) FROM `user` WHERE YEAR(registerTime) = YEAR(NOW())) - (SELECT COUNT(*) FROM `user` WHERE YEAR(registerTime) = YEAR(Date_SUB(now(),interval 1 year))))/(SELECT COUNT(*) FROM `user` WHERE YEAR(registerTime) = YEAR(Date_SUB(now(),interval 1 year)))
+-- ,2) growthRatio FROM `user` GROUP BY growthRatio;
+    select (case when (SELECT COUNT(*) FROM `user` WHERE YEAR(registerTime) = YEAR(Date_SUB(now(),interval 1 year))) = 0 then (SELECT COUNT(*) FROM `user` WHERE YEAR(registerTime) = YEAR(NOW())) else (SELECT ROUND(
+    (
+    (SELECT COUNT(*) FROM `user` WHERE YEAR(registerTime) = YEAR(NOW())) -
+    (SELECT COUNT(*) FROM `user` WHERE YEAR(registerTime) = YEAR(Date_SUB(now(),interval 1 year)))
+    )/
+    (SELECT (case when COUNT(*)=0 then 0 else COUNT(*) end)
+    FROM `user` WHERE YEAR(registerTime) = YEAR(Date_SUB(now(),interval 1 year)))
+        ,2) ) end) growthRatio FROM `user` GROUP BY growthRatio;
+    </select>
+
+</mapper>

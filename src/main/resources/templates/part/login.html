@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Favicon -->
+    <link href="/images/favicon.png" rel="icon" type="image/png">
+    
+    <!-- Basic Page Needs
+    ================================================== -->
+    <title>Instello校园交友系统</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Instello - Sharing Photos platform HTML Template">
+
+    <!-- icons
+    ================================================== -->
+    <link rel="stylesheet" href="/css/icons.css">
+
+    <!-- CSS 
+    ================================================== -->
+    <link rel="stylesheet" href="/css/uikit.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tailwind.css">
+    <link rel="stylesheet" href="/css/slidercaptcha.css">
+    <link href="https://cdn.bootcss.com/font-awesome/5.7.2/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        .slidercaptcha {
+            margin: 0 auto;
+            width: 314px;
+            height: 286px;
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.125);
+            margin-top: 40px;
+        }
+
+        .slidercaptcha .card-body {
+            padding: 1rem;
+        }
+
+        .slidercaptcha canvas:first-child {
+            border-radius: 4px;
+            border: 1px solid #e6e8eb;
+        }
+
+        .slidercaptcha.card .card-header {
+            background-image: none;
+            background-color: rgba(0, 0, 0, 0.03);
+        }
+
+        .refreshIcon {
+            top: -54px;
+        }
+    </style>
+
+
+</head>
+
+<body class="bg-gray-100">
+
+
+    <div id="wrapper" class="flex flex-col justify-between h-screen">
+
+        <!-- header-->
+        <div class="bg-white py-4 shadow dark:bg-gray-800">
+            <div class="max-w-6xl mx-auto">
+
+
+                <div class="flex items-center lg:justify-between justify-around">
+
+                    <a th:href="@{/login}">
+                        <img src="/images/logo.png" alt="" class="w-32">
+                    </a>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Content-->
+        <div id="content">
+            <div class="lg:p-12 max-w-md max-w-xl lg:my-0 my-12 mx-auto p-6 space-y-">
+                <h1 class="lg:text-3xl text-xl font-semibold  mb-6">登&nbsp;&nbsp;&nbsp;录</h1>
+                <p class="mb-2 text-black text-lg">邮箱或者你的名字</p>
+                <form th:action="@{/userLogin}" method="post" id="userLogin">
+                    <input type="text" id="username" placeholder="example@mydomain.com" class="bg-gray-200 mb-2 shadow-none dark:bg-gray-800" style="border: 1px solid #d3d5d8 !important;" name="name">
+                    <input type="password" id="password" placeholder="***********" class="bg-gray-200 mb-2 shadow-none dark:bg-gray-800" style="border: 1px solid #d3d5d8 !important;" name="password">
+
+                    <div class="flex justify-between my-4">
+                        <div class="checkbox" >
+                            <input type="checkbox" id="checkbox1">
+                            <label for="checkbox1"><span class="checkbox-icon"></span>记住账号和密码</label>
+                        </div>
+                        <a th:href="@{/findPassword}" style="color: #778899;text-decoration: none;"> 忘记密码？ </a>
+                    </div>
+                    <button type="button" id="loginButton" class="bg-gradient-to-br from-pink-500 py-3 rounded-md text-white text-xl to-red-400 w-full adc">登录</button>
+                    <div class="text-center mt-5 space-x-2">
+                        <p class="text-base"> 没有注册? <a th:href="@{/register}" class="" style="color: #778899; text-decoration: none;"> 创建一个账户 </a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!--    validation-->
+
+                <div id="validation" class="container-fluid" style="display: none;">
+                    <div class="form-row">
+                        <div class="col-12">
+                            <div class="slidercaptcha card">
+                                <div class="card-header">
+                                    <span>请完成安全验证</span>
+                                </div>
+                                <div class="card-body"><div id="captcha"></div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+        <!-- Footer -->
+        <div class="lg:mb-5 py-3 uk-link-reset"></div>
+
+    </div>
+
+
+
+
+
+
+
+    <script src="/js/jquery-3.3.1.min.js"></script>
+    <script src="/js/jquery.cookie.js"></script>
+    <script src="/js/longbow.slidercaptcha.js"></script>
+    <script src="/js/layer/layer.js"></script>
+    <script src="/js/tippy.all.min.js"></script>
+    <script src="/js/uikit.js"></script>
+    <script src="/js/simplebar.js"></script>
+    <script src="/js/custom.js"></script>
+    <script src="/myjs/login.js"></script>
+
+    <script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yjy.mapper.CommentMapper">
+
+    <delete id="deleteComment">
+        DELETE FROM comment WHERE trendsId = #{trendsId};
+    </delete>
+
+    <update id="editCommentImages">
+        UPDATE comment SET userImages = #{userImages} WHERE userId = #{userId};
+    </update>
+
+    <select id="getAllComment" resultType="com.yjy.pojo.Comment">
+        SELECT u.username username, c.id id, c.commentContent commentContent, c.trendsId trendsId, c.userId userId, c.userImages, c.commentTime FROM comment c JOIN user u ON c.userId = u.id AND c.trendsId = #{trendsId} ORDER BY c.commentTime;
+    </select>
+
+    <select id="getComment" resultType="com.yjy.pojo.Comment">
+        SELECT * FROM comment WHERE userId = #{comment.userId} AND trendsId = #{comment.trendsId} LIMIT 0,1;
+    </select>
+
+</mapper>

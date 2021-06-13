@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yjy.mapper.UserMapper">
+
+    <select id="getOneUser" resultType="com.yjy.pojo.User">
+        SELECT * FROM user WHERE  (BINARY username = #{account} OR BINARY email = #{account}) AND BINARY password = #{password};
+    </select>
+
+    <select id="getEmail" resultType="com.yjy.pojo.User">
+        SELECT * FROM user WHERE BINARY email = #{email};
+    </select>
+
+    <select id="getNameUser" resultType="com.yjy.pojo.User">
+        SELECT * FROM user WHERE BINARY username = #{username};
+    </select>
+
+    <update id="editUser">
+        UPDATE user SET username = #{user.username}, sex = #{user.sex}, college = #{user.college}, professional = #{user.professional}, introduce = #{user.introduce} WHERE id = #{user.id};
+    </update>
+
+    <select id="getEditUser" resultType="com.yjy.pojo.User">
+        SELECT * FROM user WHERE BINARY username = #{user.username} AND id != #{user.id};
+    </select>
+
+    <update id="editPassword">
+        UPDATE user SET password = #{confirmPassword} WHERE id = #{id} AND BINARY password = #{password};
+    </update>
+
+    <update id="editTitleImages">
+        UPDATE user SET titleImages = #{titleImages} WHERE id = #{id};
+    </update>
+
+    <update id="editTrendsCount">
+        UPDATE user SET trendsCount = trendsCount+1 WHERE id = #{id};
+    </update>
+
+    <update id="editLostCount">
+        UPDATE user SET lostCount = lostCount+1 WHERE id = #{id};
+    </update>
+
+    <update id="subtractLostCount">
+        UPDATE user SET lostCount = lostCount-1 WHERE id = #{id};
+    </update>
+
+    <update id="subtractTrendsCount">
+        UPDATE user SET trendsCount = trendsCount-1 WHERE id = #{id};
+    </update>
+
+    <update id="resetPassword">
+        UPDATE user SET password = #{resetPassword} WHERE id = #{id};
+    </update>
+
+    <update id="editIsResetPassword">
+        UPDATE user SET isResetPassword = #{isResetPassword} WHERE id = #{id};
+    </update>
+
+    <select id="getUser" resultType="com.yjy.pojo.User">
+        SELECT * FROM user WHERE id = #{id};
+    </select>
+
+</mapper>

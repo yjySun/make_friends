@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Favicon -->
+  <link href="/images/favicon.png" rel="icon" type="image/png">
+
+  <!-- Basic Page Needs
+  ================================================== -->
+  <title>Instello校园交友系统</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Instello - Sharing Photos platform HTML Template">
+
+  <!-- icons
+  ================================================== -->
+  <link rel="stylesheet" href="/css/icons.css">
+
+  <!-- CSS
+  ================================================== -->
+  <link rel="stylesheet" href="/css/uikit.css" >
+  <link rel="stylesheet" href="/css/style.css" >
+  <link rel="stylesheet" href="/css/tailwind.css" >
+
+</head>
+<body>
+
+<header th:fragment="headerBar">
+  <div class="header_inner">
+    <div class="left-side">
+      <!-- Logo -->
+      <div id="logo" class=" uk-hidden@s">
+        <a href="javascript:void(0);">
+          <img src="/images/logo-mobile.png" alt="">
+          <img src="/images/logo-mobile-light.png" class="logo_inverse">
+        </a>
+      </div>
+
+      <div class="triger" uk-toggle="target: #wrapper ; cls: sidebar-active">
+        <i class="uil-bars"></i>
+      </div>
+    </div>
+    <div class="right-side lg:pr-4">
+      <!-- upload -->
+      <a href="javascript:void(0);" uk-toggle="target: #offcanvas-create"
+         class="bg-pink-500 flex font-bold hover:bg-pink-600 hover:text-white inline-block items-center lg:block max-h-10 mr-4 px-4 py-2 rounded shado text-white">
+         发表动态
+      </a>
+    </div>
+  </div>
+</header>
+
+<script src="/js/tippy.all.min.js"></script>
+<script src="/js/jquery-3.3.1.min.js"></script>
+<script src="/js/uikit.js"></script>
+<script src="/js/simplebar.js"></script>
+<script src="/js/custom.js"></script>
+
+
+
+<script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
+</body>
+</html>
